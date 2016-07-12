@@ -43,6 +43,7 @@ function fetch({ types }) {
       case resetResponseType:
         return merge({}, {
           code: -1,
+          isFetching: false,
           message: '',
           success: false,
         });
@@ -61,15 +62,14 @@ const fetchStatus = combineReducers({
       ActionTypes.LOGIN_RESET_RESPONSE,
     ],
   }),
-  registerStatus: fetch({
+
+  userInfoStatus: fetch({
     types: [
-      ActionTypes.REGISTER_REQUEST,
-      ActionTypes.REGISTER_SUCCESS,
-      ActionTypes.REGISTER_FAILURE,
-      ActionTypes.REGISTER_RESET_RESPONSE,
+      ActionTypes.USER_INFO_REQUEST,
+      ActionTypes.USER_INFO_SUCCESS,
+      ActionTypes.USER_INFO_FAILURE,
     ],
   }),
-
 });
 
 export default fetchStatus;

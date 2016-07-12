@@ -16,27 +16,6 @@ export function checkTokenExpire() {
   return { type: ActionTypes.CHECK_TOKEN };
 }
 
-export function register({ email, password, register_code, is_publish }) {
-  return {
-    [CALL_API]: {
-      types: [
-        ActionTypes.REGISTER_REQUEST,
-        ActionTypes.REGISTER_SUCCESS,
-        ActionTypes.REGISTER_FAILURE,
-        ActionTypes.REGISTER_RESET_RESPONSE,
-      ],
-      endpoint: 'users',
-      method: 'POST',
-      params: merge({}, {
-        email,
-        password: sha1(password),
-        register_code,
-        is_publish,
-      }),
-    },
-  };
-}
-
 export function login({ email, password }, remember) {
   return {
     [CALL_API]: {
@@ -77,20 +56,6 @@ export function fetchUserInfo() {
         ActionTypes.USER_INFO_FAILURE,
       ],
       endpoint: 'account',
-      method: 'GET',
-    },
-  };
-}
-
-export function fetchUserProfile() {
-  return {
-    [CALL_API]: {
-      types: [
-        ActionTypes.USER_PROFILE_REQUEST,
-        ActionTypes.USER_PROFILE_SUCCESS,
-        ActionTypes.USER_PROFILE_FAILURE,
-      ],
-      endpoint: 'account/profile',
       method: 'GET',
     },
   };

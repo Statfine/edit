@@ -13,10 +13,20 @@ export default class IndexContainer extends Component {
     super(props);
   }
 
+  componentWillReceiveProps(nextProps) {
+    const { userInfoStatus, loginStatus } = nextProps.fetchStatus;
+    console.log('userInfoStatus=====>' + userInfoStatus.isFetching);
+    console.log('loginStatus=====>' + loginStatus.isFetching);
+  }
+
   _handleClick = () => {
     alert('Click');
     this.props.login({ email: 'sj@easub.com', password: '123456' }, '1');
   };
+
+  _handleGetk = () => {
+    this.props.fetchUserInfo();
+  }
 
   render() {
 
@@ -27,6 +37,12 @@ export default class IndexContainer extends Component {
           fullWidth={true}
           onTouchTap={ this._handleClick }
         />
+        <RaisedButton
+          style={{ marginTop: '20px' }}
+          label={'get'}
+          fullWidth={true}
+          onTouchTap={ this._handleGetk }
+        />
       </div>
     );
   }
@@ -35,6 +51,7 @@ export default class IndexContainer extends Component {
 IndexContainer.propTypes = {
   application: PropTypes.object.isRequired,
   login: PropTypes.func.isRequired,
+  fetchUserInfo: PropTypes.func.isRequired,
   setMsg: PropTypes.func.isRequired,
 };
 

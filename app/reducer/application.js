@@ -51,11 +51,25 @@ export function application(state = initialState, action) {
         auth,
         expired,
       });
-    case ActionTypes.REGISTER_SUCCESS:
-      return merge({}, state, {
-        emailVerify: true,
-      });
     case ActionTypes.LOGIN_SUCCESS:
+      const data = action.response.data;
+
+      if (!data.auth) {
+        data.auth = { ...data,
+        };
+      }
+
+      utils.setAuthInfoToStorage(data.auth, true);
+      const refreshToken = data.auth.refreshToken;
+      return merge({},
+        state, {
+          auth: {
+            ...data.auth,
+            expiresIn: utils.getExpiresTime(data.expiresIn),
+            refreshToken,
+          },
+          expired: false,
+        });
     case ActionTypes.REFRESHING_TOKEN:
       return merge({}, state, {
         refreshingToken: true,
@@ -70,35 +84,6 @@ export function application(state = initialState, action) {
           expired: false,
           refreshingToken: false,
         });
-    case ActionTypes.USER_INFO_SUCCESS:
-      return merge({}, state, action.response.data);
-    case ActionTypes.USER_PROFILE_SUCCESS:
-      const {
-        avatar,
-        birthday,
-        city,
-        country,
-        email,
-        name,
-        nativeLanguage,
-        proficientLanguages,
-        sex,
-        tags,
-        } = action.response.data;
-      return merge({}, state, action.response.data, {
-        UserProfileInEditor: {
-          avatar,
-          birthday,
-          city,
-          country,
-          email,
-          name,
-          nativeLanguage,
-          proficientLanguages,
-          sex,
-          tags,
-        },
-      });
     case ActionTypes.SIGN_OUT:
       storage.clear();
       return merge({}, state, {
@@ -109,6 +94,8 @@ export function application(state = initialState, action) {
       return merge({}, state, {
         logout: true,
       });
+    case ActionTypes.USER_INFO_SUCCESS:
+      return merge({}, state, action.response.data);
     default:
       return state;
   }
